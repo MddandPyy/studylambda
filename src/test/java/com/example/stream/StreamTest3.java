@@ -1,5 +1,6 @@
 package com.example.stream;
 
+import com.example.lambda.entity.BigDecimalEntity;
 import com.example.lambda.entity.Employee;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
  * reduce 可以将流中元素反复结合起来，得到一个值
  *
  * 三、收集
- *collect 将流转换为其他形式，接收一个collector接口的实现，用于给Stream中元素做汇总的方法
+ *collect 。，接收一个collector接口的实现，用于给Stream中元素做汇总的方法
  */
 public class StreamTest3 {
     List<Employee> list = Arrays.asList(
@@ -33,8 +34,33 @@ public class StreamTest3 {
             new Employee("zhangsan4",20,2500),
             new Employee("zhangsan6",40,10000),
             new Employee("zhangsan6",50,10000),
+            new Employee("zhangsan1",18,3000),
+            new Employee("zhangsan2",30,5000),
+            new Employee("zhangsan3",40,6000),
+            new Employee("zhangsan4",20,2500),
+            new Employee("zhangsan6",40,10000),
+            new Employee("zhangsan6",50,10000),
             new Employee("zhangsan6",50,10000)
     );
+
+    List<BigDecimalEntity> list1 = Arrays.asList(
+            new BigDecimalEntity(1L,new BigDecimal(2)),
+            new BigDecimalEntity(1L,new BigDecimal(2)),
+            new BigDecimalEntity(2L,new BigDecimal(2)),
+            new BigDecimalEntity(3L,new BigDecimal(2)),
+            new BigDecimalEntity(3L,new BigDecimal(1))
+    );
+
+    @Test
+    public void test15(){
+    Map<String, Set<String>> collect =
+        list.stream()
+            .collect(
+                Collectors.groupingBy(
+                    Employee::getName,
+                    Collectors.mapping((pay) -> pay.getName() + pay.getAge(), Collectors.toSet())));
+    System.out.println(collect);
+    }
 
     @Test
     public void test1(){
@@ -54,6 +80,13 @@ public class StreamTest3 {
     public void test3(){
         long count = list.stream().count();
         System.out.println(count);
+    }
+
+    @Test
+        public void test99(){
+        BigDecimal a = null;
+        Integer b = a.intValue();
+        System.out.println(b);
     }
 
     @Test
@@ -148,5 +181,19 @@ public class StreamTest3 {
         BigDecimal b = new BigDecimal(13.5000);
         int i = b.intValue();
         System.out.println(i);
+    }
+
+    @Test
+    public void test12(){
+    // 分组，求和BigDecimal
+    Map<Long, BigDecimal> map =
+        list1.stream()
+            .collect(
+                Collectors.groupingBy(
+                    BigDecimalEntity::getId,
+                    Collectors.mapping(
+                        BigDecimalEntity::getNum,
+                        Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+    System.out.println(map);
     }
 }
