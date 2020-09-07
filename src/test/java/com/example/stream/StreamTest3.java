@@ -172,7 +172,7 @@ public class StreamTest3 {
     //连接字符串
     @Test
     public void test10(){
-        String collect = list.stream().map(Employee::getName).collect(Collectors.joining(",","开头-","-结尾"));
+        String collect = list.stream().filter((e)->e.getName().equals("zhangsan6")).map(Employee::getName).collect(Collectors.joining(",","开头-","-结尾"));
         System.out.println(collect);
     }
 
